@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dog_quotes_4/components/dog_card.dart';
 import 'package:dog_quotes_4/models/dog.dart';
@@ -6,14 +7,24 @@ import 'package:dog_quotes_4/utils/quote_utils.dart';
 import 'package:flutter/material.dart';
 
 // TODO (6): Import the http.dart file as http
+import 'package:http/http.dart' as http;
 
-// TODO (1): Convert to stateful widget
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   List<Dog> dogs = [];
 
+  // TODO (1): Convert to stateful widget
   // TODO (2): Override initState()
   // TODO (3): Create an async method called _downloadDogInfo()
   // TODO (4): Call _downloadDogInfo() inside of initState()
+  @override
+  void initState() {
+    _downloadDogInfo();
+  }
 
   // Within _downloadDogInfo()
   // TODO (7): try {} finally {}
@@ -23,26 +34,26 @@ class HomeScreen extends StatelessWidget {
   // String apiUrl = 'https://api.thedogapi.com/v1/breeds';
   // http.Response response = await client.get(apiUrl);
   // var body = jsonDecode(response.body);
-  //
+  
   // TODO (10): Create a List<Dog> called tempDogs
   // List<Dog> tempDogs = [];
   // TODO (11): Traverse through the list of dogs
   // for (var dogJson in body) {
   //   TODO (12): Print dogJson['id'];
   //   print(dogJson['id']);
-  //
+
   //   TODO (13): Send a request to the API for the images of dog with id = dogJson['id']
   //   String imageApiUrl =
   //             'https://api.thedogapi.com/v1/images/search?breed_id=${dogJson['id']}&include_breeds=false&limit=50';
   //   http.Response imageResponse = await client.get(imageApiUrl);
   //   var imageBody = jsonDecode(imageResponse.body);
-  //
+
   //   TODO (14): Iterate through the image JSON objects to get a list of String with imageUrls.
   //   List<String> images = [];
   //   for (var imageJson in imageBody) {
   //     images.add(imageJson['url']);
   //   }
-  //
+
   //   TODO (15): Add the Dog with its associated fields to tempDogs
   //   tempDogs.add(Dog(
   //     name: dogJson['name'],
@@ -56,7 +67,7 @@ class HomeScreen extends StatelessWidget {
   //     temperament: dogJson['temperament'],
   //     imageUrls: images,
   //   ));
-  //
+
   //   TODO (16): Call setState() with dogs = tempDogs
   //   setState(() {
   //     dogs = tempDogs;
@@ -66,6 +77,45 @@ class HomeScreen extends StatelessWidget {
   // TODO (17): Close the client
   // client.close();
   // }
+
+  _downloadDogInfo() async {
+    http.Client client = http.Client();
+    try{
+      String apiUrl = 'https://api.thedogapi.com/v1/breeds';
+      http.Response response = await client.get(apiUrl);
+      var body = jsonDecode(response.body);
+
+      List<Dog> tempDogs = [];
+      for (var dog in body){
+        // print(dog['id']);
+
+        String imageApiUrl = 'https://api.thedogapi.com/v1/images/search?breed_id=${dog['id']}&include_breeds=false&limit=50';
+        http.Response imgResponse = await client.get(imageApiUrl);
+        var imgBody = jsonDecode(imgResponse.body);
+        List<String> images = [];
+        for (var img in imgBody){
+          images.add(img['url']);
+        }
+
+        tempDogs.add(Dog(
+          name: dog['name'], 
+          quote: QuoteUtils.getRandomQuote(), 
+          bredFor: dog['bredFor'], 
+          breedGroup: dog['breed_group'], 
+          height: dog['height']['imperial'], 
+          weight: dog['weight']['imperial'],
+          lifespan: dog['life_span'],
+          origin: dog['origin'],
+          temperament: dog['temperament'],
+          imageUrls: images));
+      }
+      setState(() {
+              dogs = tempDogs;
+            });
+    } finally {
+      client.close();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
