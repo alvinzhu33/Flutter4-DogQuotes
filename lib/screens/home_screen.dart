@@ -21,7 +21,9 @@ class HomeScreen extends StatelessWidget {
       // TODO (8): DogCard.dog = dogs[index]
       // TODO (9): ListView.itemCount = dogs.length
 
-      body: Container(),
+      body: ListView.builder(itemBuilder: (context, index) {
+        return DogCard(dog: dogs[index],);
+      }, itemCount: dogs.length,),
     );
   }
 }

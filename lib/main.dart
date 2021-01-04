@@ -30,6 +30,10 @@ class MyApp extends StatelessWidget {
         // TODO (2): Add primary color dark = Colors.brown[700]
         // TODO (3): Add primary color light = Colors.brown[100]
         // TODO (4): Add accent color = Colors.lightGreen
+        primaryColor: Colors.brown,
+        primaryColorDark: Colors.brown[700],
+        primaryColorLight: Colors.brown[100],
+        accentColor: Colors.lightGreen,
       ),
       home: HomeScreen(),
     );
