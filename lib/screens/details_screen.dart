@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dog_quotes_4/models/dog.dart';
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class DetailsScreen extends StatelessWidget {
   final Dog dog;
@@ -59,8 +61,41 @@ class DetailsScreen extends StatelessWidget {
             // .toList(),
 
             Container(
-              height: 250.0,
+              // height: 250.0,
               color: Theme.of(context).primaryColorLight,
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  height: 250.0,
+                  autoPlay: true,
+                  enableInfiniteScroll: false,
+                  scrollDirection: Axis.horizontal,
+                  autoPlayInterval: Duration(seconds: 2, milliseconds: 500),
+                ),
+                items: dog.imageUrls
+                  .asMap()
+                  .entries
+                  .map((imageUrl) => Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.brown),
+                        borderRadius: BorderRadius.circular(20.0)
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: Align(
+                          child: CachedNetworkImage(imageUrl: imageUrl.value, placeholder: (context, url) => Center(
+                            child: Container(
+                              height: 25.0,
+                              width: 25.0,
+                              child: CircularProgressIndicator(),
+                            )
+                          ),),
+                        ),
+                      ),
+                    ),
+                  )).toList(),
+              ),
             ),
             Padding(
               padding:

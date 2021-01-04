@@ -14,25 +14,30 @@ class DogCard extends StatelessWidget {
     // TODO (1): Wrap the Card with a GestureDetector
     // TODO (2): In the onTap, launch the DetailsScreen
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        child: ListTile(
-          leading: CachedNetworkImage(
-            width: 100.0,
-            fit: BoxFit.cover,
-            imageUrl: dog.imageUrls[0],
-            placeholder: (context, url) => Center(
-              child: Container(
-                height: 25.0,
-                width: 25.0,
-                child: CircularProgressIndicator(),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsScreen(dog: dog,)));
+      },
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: ListTile(
+            leading: CachedNetworkImage(
+              width: 100.0,
+              fit: BoxFit.cover,
+              imageUrl: dog.imageUrls[0],
+              placeholder: (context, url) => Center(
+                child: Container(
+                  height: 25.0,
+                  width: 25.0,
+                  child: CircularProgressIndicator(),
+                ),
               ),
+              errorWidget: (context, url, error) => Icon(Icons.broken_image),
             ),
-            errorWidget: (context, url, error) => Icon(Icons.broken_image),
+            title: Text(dog.name),
+            subtitle: Text(dog.quote),
           ),
-          title: Text(dog.name),
-          subtitle: Text(dog.quote),
         ),
       ),
     );
