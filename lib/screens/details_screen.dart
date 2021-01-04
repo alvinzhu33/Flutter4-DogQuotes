@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dog_quotes_4/models/dog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 class DetailsScreen extends StatelessWidget {
   final Dog dog;
@@ -76,6 +77,38 @@ class DetailsScreen extends StatelessWidget {
               //     fontWeight: FontWeight.w600,
               //   ),
               // ),
+              child: Column(children: [
+                Text(dog.name, textAlign: TextAlign.center, style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.w600)),
+                const SizedBox(height: 50.0,),
+                Text(dog.quote, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),),
+                const SizedBox(height: 20.0,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(FlutterIcons.md_globe_ion),
+                    const SizedBox(width: 10.0),
+                    Text(dog.origin, style: TextStyle(fontSize: 18.0))
+                ],),
+                const SizedBox(height:20.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.height),
+                        const SizedBox(width: 10.0),
+                        Text("${dog.height} ft", style: TextStyle(fontSize: 18.0)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(Icons.line_weight),
+                        const SizedBox(width: 10.0),
+                        Text("${dog.weight} lb", style: TextStyle(fontSize: 18.0))
+                      ],
+                    ),
+                  ],),
+              ],),
 
               // TODO (5): Add a SizedBox of height 5.0
 
